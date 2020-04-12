@@ -4,9 +4,8 @@ const express = require('express');
 const app = express();
 const http = require('http').createServer(app);
 const io = require('socket.io')(http, {
-  // path: 'audio',
   resource: 'audio'
-});
+})
 
 const ServerPort = 13000;
 
@@ -21,12 +20,14 @@ app.get('/', function(req, res){
 io.on('connection', function(client){
   console.log('a user connected');
 
-  client.on('start-recording', function (data) {
+  let id;
+
+  client.on('start-recording', function() {
     // stream = fs.createWriteStream('tesfile.wav');
 
-    const id = uuidv4();
+    id = uuidv4();
 
-    console.log('start-recording', id, data && data.length);
+    console.log(`start-recording:${id}`);
   
     outputFileStream = new WavFileWriter(`./audio/recs/${id}.wav`, {
       sampleRate: 16000,
@@ -35,8 +36,8 @@ io.on('connection', function(client){
     });
   });
 
-  client.on('end-recording', function (data) {
-    console.log('end-recording', data && data.length);
+  client.on('end-recording', function() {
+    console.log(`end-recording:${id}`);
 
     if(outputFileStream) {
       outputFileStream.end();
@@ -44,8 +45,8 @@ io.on('connection', function(client){
     outputFileStream = null;
   });
 
-  client.on('write-audio', function (data) {
-    console.log('write-audio', data && data.length);
+  client.on('write-audio', function(data) {
+    console.log(`write-audio:${id}, got ${data ? data.length : 0} bytes}`);
 
     if(outputFileStream) {
       outputFileStream.write(data);
