@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Audio to server recording</title>
+</head>
+<body>
+  
+  <div>
+    <button id="toggle-recording" onclick="toggleRecording(this)">Start recording</button>
+  </div>
+
+  <div id="recordings">
+    <h3>Download recordings:</h3>
+    <ul></ul>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.3/socket.io.slim.js"></script>
+  <script src="client.js"></script>
+
+</body>
+</html>
