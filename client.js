@@ -13,13 +13,13 @@ function toggleRecording(e) {
     e.classList.remove('recording');
     e.textContent = "Start recording";
     recording = false;
-    socketio.emit('end-recording');
+    socketio.emit('end-audio');
   } else {
     // start recording
     e.classList.add('recording');
     e.textContent = "Stop recording";
     recording = true;
-    socketio.emit('start-recording', { numChannels: 1, bps: 16, fps: parseInt(audioContext.sampleRate) });
+    socketio.emit('start-audio', { numChannels: 1, bps: 16, fps: parseInt(audioContext.sampleRate) });
   }
 }
 
@@ -54,7 +54,7 @@ function gotStream(stream) {
 
       const left16 = downsampleBuffer(input, 44100, 16000);
 
-      socketio.emit('write-audio', left16);
+      socketio.emit('binaryData', left16);
     }
   }
   inputPoint.connect(scriptNode);

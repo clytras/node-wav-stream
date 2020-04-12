@@ -22,12 +22,12 @@ io.on('connection', function(client){
 
   let id;
 
-  client.on('start-recording', function() {
+  client.on('start-audio', function() {
     // stream = fs.createWriteStream('tesfile.wav');
 
     id = uuidv4();
 
-    console.log(`start-recording:${id}`);
+    console.log(`start-audio:${id}`);
   
     outputFileStream = new WavFileWriter(`./audio/recs/${id}.wav`, {
       sampleRate: 16000,
@@ -36,8 +36,8 @@ io.on('connection', function(client){
     });
   });
 
-  client.on('end-recording', function() {
-    console.log(`end-recording:${id}`);
+  client.on('end-audio', function() {
+    console.log(`end-audio:${id}`);
 
     if(outputFileStream) {
       outputFileStream.end();
@@ -45,8 +45,8 @@ io.on('connection', function(client){
     outputFileStream = null;
   });
 
-  client.on('write-audio', function(data) {
-    console.log(`write-audio:${id}, got ${data ? data.length : 0} bytes}`);
+  client.on('binaryData', function(data) {
+    console.log(`binaryData:${id}, got ${data ? data.length : 0} bytes}`);
 
     if(outputFileStream) {
       outputFileStream.write(data);
